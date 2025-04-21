@@ -64,7 +64,7 @@ public class TaskManager
 
     public Task GetTaskById(int id)
     {
-        return Tasks.FirstOrDefault(t => t.Id == id);
+        return Tasks.FirstOrDefault(t => t.Id == id)!;
     }
 
     public bool UpdateTask(Task task)

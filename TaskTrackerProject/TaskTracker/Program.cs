@@ -2,8 +2,8 @@
 
 public class Program
 {
-    private TaskManager taskManager;
-    private ConsoleUI ui;
+    private TaskManager taskManager = null!;
+    private ConsoleUI? ui;
 
     public void Initialize()
     {
@@ -18,7 +18,7 @@ public class Program
         while (running)
         {
             ui.DisplayMainMenu();
-            string choice = Console.ReadLine();
+            string choice = Console.ReadLine() ?? string.Empty;
 
             switch (choice)
             {
@@ -71,7 +71,10 @@ public class Program
                     
                 case "6": // Exit Application
                     Console.Clear();
+                    Console.WriteLine("===================================");
                     Console.WriteLine("Thank you for using TaskTracker. Your tasks have been saved.");
+                    Console.WriteLine("Have a productive day!");
+                    Console.WriteLine("===================================");
                     running = false;
                     break;
                     
@@ -89,4 +92,3 @@ public class Program
         program.Run();
     }
 }
-

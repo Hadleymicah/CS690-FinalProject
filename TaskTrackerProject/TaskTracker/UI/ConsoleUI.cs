@@ -1,4 +1,3 @@
-
 namespace TaskTracker;
 
 using System.Text;
@@ -15,15 +14,18 @@ public class ConsoleUI
     public void DisplayMainMenu()
     {
         Console.Clear();
+        Console.WriteLine("===================================");
         Console.WriteLine("          T A S K T R A C K E R    ");
+        Console.WriteLine("===================================");
         Console.WriteLine($"Today: {DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}");
         Console.WriteLine();
-        Console.WriteLine("1 Add New Task");
-        Console.WriteLine("2 View Dashboard");
-        Console.WriteLine("3 Edit Task");
-        Console.WriteLine("4 Delete Task");
-        Console.WriteLine("5 Daily Summary");
-        Console.WriteLine("6 Exit Application");
+        Console.WriteLine("[1] Add New Task");
+        Console.WriteLine("[2] View Dashboard");
+        Console.WriteLine("[3] Edit Task");
+        Console.WriteLine("[4] Delete Task");
+        Console.WriteLine("[5] Daily Summary");
+        Console.WriteLine("[6] Exit Application");
+        Console.WriteLine("===================================");
         Console.Write("Enter your choice (1-6): ");
     }
 
@@ -34,9 +36,9 @@ public class ConsoleUI
         while (continueAdding)
         {
             Console.Clear();
-
+            Console.WriteLine("===================================");
             Console.WriteLine("          ADD NEW TASK            ");
-
+            Console.WriteLine("===================================");
             
             var newTask = GetTaskInputFromUser();
             
@@ -49,23 +51,23 @@ public class ConsoleUI
                 Console.WriteLine($"Important: {(newTask.IsImportant ? "Yes" : "No")}");
                 Console.WriteLine($"Due Date: {(newTask.DueDate.HasValue ? newTask.DueDate.Value.ToShortDateString() : "Not set")}");
                 
-                Console.WriteLine("\n1 Save task");
-                Console.WriteLine("2 Edit information");
-                Console.WriteLine("3 Cancel");
+                Console.WriteLine("\n[1] Save task");
+                Console.WriteLine("[2] Edit information");
+                Console.WriteLine("[3] Cancel");
                 Console.Write("Enter your choice (1-3): ");
                 
-                string confirmation = Console.ReadLine();
+                string confirmation = Console.ReadLine() ?? string.Empty;
                 
                 if (confirmation == "1")
                 {
                     taskManager.AddTask(newTask.Title, newTask.Description, newTask.TaskPriority, newTask.IsImportant, newTask.DueDate);
                     ShowNotification("Task saved successfully!");
                     
-                    Console.WriteLine("\n1 Add another task");
-                    Console.WriteLine("2 Return to main menu");
+                    Console.WriteLine("\n[1] Add another task");
+                    Console.WriteLine("[2] Return to main menu");
                     Console.Write("Enter your choice (1-2): ");
                     
-                    string addMore = Console.ReadLine();
+                    string addMore = Console.ReadLine() ?? string.Empty;
                     continueAdding = (addMore == "1");
                 }
                 else if (confirmation == "2")
@@ -98,7 +100,9 @@ public class ConsoleUI
         while (continueEditing)
         {
             Console.Clear();
+            Console.WriteLine("===================================");
             Console.WriteLine("           EDIT TASK              ");
+            Console.WriteLine("===================================");
             Console.WriteLine($"Task ID: {editedTask.Id}");
             Console.WriteLine($"Current Title: {editedTask.Title}");
             Console.WriteLine($"Current Description: {editedTask.Description}");
@@ -109,23 +113,23 @@ public class ConsoleUI
             Console.WriteLine();
             
             Console.WriteLine("Select field to edit:");
-            Console.WriteLine("1 Title");
-            Console.WriteLine("2 Description");
-            Console.WriteLine("3 Priority");
-            Console.WriteLine("4 Importance");
-            Console.WriteLine("5 Due Date");
-            Console.WriteLine("6 Completion Status");
-            Console.WriteLine("7 Save Changes");
-            Console.WriteLine("8 Cancel");
+            Console.WriteLine("[1] Title");
+            Console.WriteLine("[2] Description");
+            Console.WriteLine("[3] Priority");
+            Console.WriteLine("[4] Importance");
+            Console.WriteLine("[5] Due Date");
+            Console.WriteLine("[6] Completion Status");
+            Console.WriteLine("[7] Save Changes");
+            Console.WriteLine("[8] Cancel");
             Console.Write("Enter your choice (1-8): ");
             
-            string choice = Console.ReadLine();
+            string choice = Console.ReadLine() ?? string.Empty;
             
             switch (choice)
             {
                 case "1":
                     Console.Write("Enter new title: ");
-                    string newTitle = Console.ReadLine();
+                    string newTitle = Console.ReadLine() ?? string.Empty;
                     if (!string.IsNullOrWhiteSpace(newTitle))
                     {
                         editedTask.UpdateTitle(newTitle);
@@ -134,17 +138,17 @@ public class ConsoleUI
                     
                 case "2":
                     Console.Write("Enter new description: ");
-                    string newDescription = Console.ReadLine();
+                    string newDescription = Console.ReadLine() ?? string.Empty;
                     editedTask.UpdateDescription(newDescription ?? "");
                     break;
                     
                 case "3":
                     Console.WriteLine("Select new priority:");
-                    Console.WriteLine("1 High");
-                    Console.WriteLine("2 Medium");
-                    Console.WriteLine("3 Low");
+                    Console.WriteLine("[1] High");
+                    Console.WriteLine("[2] Medium");
+                    Console.WriteLine("[3] Low");
                     Console.Write("Enter your choice (1-3): ");
-                    string priorityChoice = Console.ReadLine();
+                    string priorityChoice = Console.ReadLine() ?? string.Empty;
                     
                     Priority newPriority = Priority.Medium;
                     if (priorityChoice == "1") newPriority = Priority.High;
@@ -163,7 +167,7 @@ public class ConsoleUI
                     
                 case "5":
                     Console.WriteLine("Enter new due date (MM/DD/YYYY) or leave empty to remove:");
-                    string dueDateInput = Console.ReadLine();
+                    string dueDateInput = Console.ReadLine() ?? string.Empty;
                     
                     if (string.IsNullOrWhiteSpace(dueDateInput))
                     {
@@ -216,7 +220,9 @@ public class ConsoleUI
     public void DisplayDeleteTaskConfirmation(Task task)
     {
         Console.Clear();
+        Console.WriteLine("===================================");
         Console.WriteLine("          DELETE TASK             ");
+        Console.WriteLine("===================================");
         Console.WriteLine("Are you sure you want to delete this task?");
         Console.WriteLine();
         Console.WriteLine($"Title: {task.Title}");
@@ -245,7 +251,9 @@ public class ConsoleUI
         while (viewingDashboard)
         {
             Console.Clear();
+            Console.WriteLine("===================================");
             Console.WriteLine("          TASK DASHBOARD          ");
+            Console.WriteLine("===================================");
             
             var allTasks = taskManager.GetAllTasks();
             var completedTasks = taskManager.GetCompletedTasks();
@@ -261,15 +269,15 @@ public class ConsoleUI
             Console.WriteLine();
             
             Console.WriteLine("Filter options:");
-            Console.WriteLine("1 All Tasks");
-            Console.WriteLine("2 Pending Tasks");
-            Console.WriteLine("3 Completed Tasks");
-            Console.WriteLine("4 High Priority Tasks");
-            Console.WriteLine("5 Important Tasks");
-            Console.WriteLine("6 Return to Main Menu");
+            Console.WriteLine("[1] All Tasks");
+            Console.WriteLine("[2] Pending Tasks");
+            Console.WriteLine("[3] Completed Tasks");
+            Console.WriteLine("[4] High Priority Tasks");
+            Console.WriteLine("[5] Important Tasks");
+            Console.WriteLine("[6] Return to Main Menu");
             Console.Write("Enter your choice (1-6): ");
             
-            string filterChoice = Console.ReadLine();
+            string filterChoice = Console.ReadLine() ?? string.Empty;
             List<Task> filteredTasks = new List<Task>();
             
             switch (filterChoice)
@@ -314,7 +322,7 @@ public class ConsoleUI
             Console.WriteLine("Enter 'M' to return to main menu");
             Console.Write("Your choice: ");
             
-            string taskChoice = Console.ReadLine();
+            string taskChoice = Console.ReadLine() ?? string.Empty;
             
             if (taskChoice.ToUpper() == "B")
             {
@@ -351,7 +359,9 @@ public class ConsoleUI
         while (viewingDetails)
         {
             Console.Clear();
+            Console.WriteLine("===================================");
             Console.WriteLine("          TASK DETAILS            ");
+            Console.WriteLine("===================================");
             Console.WriteLine($"Title: {task.Title}");
             Console.WriteLine($"Description: {task.Description}");
             Console.WriteLine($"Priority: {task.TaskPriority}");
@@ -362,13 +372,13 @@ public class ConsoleUI
             Console.WriteLine();
             
             Console.WriteLine("Available actions:");
-            Console.WriteLine($"1 Mark as {(task.IsCompleted ? "Incomplete" : "Complete")}");
-            Console.WriteLine("2 Edit Task");
-            Console.WriteLine("3 Delete Task");
-            Console.WriteLine("4 Return to Dashboard");
+            Console.WriteLine($"[1] Mark as {(task.IsCompleted ? "Incomplete" : "Complete")}");
+            Console.WriteLine("[2] Edit Task");
+            Console.WriteLine("[3] Delete Task");
+            Console.WriteLine("[4] Return to Dashboard");
             Console.Write("Enter your choice (1-4): ");
             
-            string actionChoice = Console.ReadLine();
+            string actionChoice = Console.ReadLine() ?? string.Empty;
             
             switch (actionChoice)
             {
@@ -403,16 +413,18 @@ public class ConsoleUI
     public void DisplayDailySummary(DailySummary summary)
     {
         Console.Clear();
+        Console.WriteLine("===================================");
         Console.WriteLine("          DAILY SUMMARY           ");
+        Console.WriteLine("===================================");
         
         Console.WriteLine(summary.GenerateSummaryReport());
         
         Console.WriteLine("\nOptions:");
-        Console.WriteLine("1 Save summary to file");
-        Console.WriteLine("2 Return to Main Menu");
+        Console.WriteLine("[1] Save summary to file");
+        Console.WriteLine("[2] Return to Main Menu");
         Console.Write("Enter your choice (1-2): ");
         
-        string choice = Console.ReadLine();
+        string choice = Console.ReadLine() ?? string.Empty;
         
         if (choice == "1")
         {
@@ -422,26 +434,26 @@ public class ConsoleUI
         }
     }
 
-    public Task GetTaskInputFromUser()
+    public Task? GetTaskInputFromUser()
     {
         Console.Write("Enter task title: ");
-        string title = Console.ReadLine();
+        string title = Console.ReadLine() ?? string.Empty;
         
         if (string.IsNullOrWhiteSpace(title))
         {
             ShowError("Title cannot be empty.");
-            return null;
+            return null; // Explicitly returning null for invalid input
         }
         
         Console.Write("Enter task description (optional): ");
         string description = Console.ReadLine() ?? "";
         
         Console.WriteLine("\nSelect priority:");
-        Console.WriteLine("1 High");
-        Console.WriteLine("2 Medium");
-        Console.WriteLine("3 Low");
+        Console.WriteLine("[1] High");
+        Console.WriteLine("[2] Medium");
+        Console.WriteLine("[3] Low");
         Console.Write("Enter your choice (1-3): ");
-        string priorityInput = Console.ReadLine();
+        string priorityInput = Console.ReadLine() ?? string.Empty;
         
         Priority priority = Priority.Medium; // Default
         switch (priorityInput)
@@ -465,7 +477,7 @@ public class ConsoleUI
         
         DateTime? dueDate = null;
         Console.Write("\nEnter due date (MM/DD/YYYY) or leave empty for no due date: ");
-        string dueDateInput = Console.ReadLine();
+        string dueDateInput = Console.ReadLine() ?? string.Empty;
         
         if (!string.IsNullOrWhiteSpace(dueDateInput))
         {
@@ -527,7 +539,7 @@ public class ConsoleUI
     {
         Console.WriteLine();
         Console.WriteLine("ID | Title                  | Priority | Important | Due Date   | Status");
-        Console.WriteLine("   |                        |          |           |            |          ");
+        Console.WriteLine("---+------------------------+----------+-----------+------------+----------");
         
         foreach (var task in tasks)
         {
