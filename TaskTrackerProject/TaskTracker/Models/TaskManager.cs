@@ -16,19 +16,25 @@ public class TaskManager
         LoadTasks();
     }
 
+    //Overloaded constructor to allow for testing
+     public TaskManager(List<Task>? initialTasks = null, string? customFilePath = null)
+    {
+        if (initialTasks != null)
+        {
+            Tasks = initialTasks;
+        }
+        else
+        {
+            Tasks = new List<Task>();
+            filePath = customFilePath ?? "tasks.txt";
+            LoadTasks();
+        }
+    }
+
     private int GetNextTaskId()
     {
         return nextId++;
     }
-
-   // public Task AddTask(string title, string description, Priority priority, bool isImportant, DateTime? dueDate)
-   // {
-    //    var task = new Task(nextId, title, description, priority, isImportant, dueDate);
-     //   Tasks.Add(task);
-      //  nextId++;
-      //  SaveTasks();
-      //  return task;
-   // }
 
     public Task AddTask(string title, string description, Priority priority, bool isImportant, DateTime? dueDate)
 {

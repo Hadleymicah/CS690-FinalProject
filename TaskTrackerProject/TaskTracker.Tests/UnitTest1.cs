@@ -36,16 +36,25 @@ namespace TaskTracker.Tests
         }
 
         // TaskManager class
+
         [Fact]
         public void TaskManager_Constructor_InitializesWithHistoricalTasks()
         {
+            // Arrange: Provide mock historical tasks
+            var mockTasks = new List<Task>
+            {
+                new Task(1, "Mock Task 1", "Description 1", Priority.Low, false, null),
+                new Task(2, "Mock Task 2", "Description 2", Priority.High, true, DateTime.Now.AddDays(1))
+            };
+            var taskManager = new TaskManager(mockTasks);
+
             // Act
-            var taskManager = new TaskManager();
+            var tasks = taskManager.GetAllTasks();
 
             // Assert
-            var tasks = taskManager.GetAllTasks();
-            Assert.NotNull(tasks); // Ensure tasks are loaded
-            Assert.NotEmpty(tasks); // Historical tasks present
+            Assert.NotNull(tasks);
+            Assert.NotEmpty(tasks); // Verify that the historical tasks are loaded
+            Assert.Equal(2, tasks.Count); // Verify the correct number of tasks
         }
 
         [Fact]
