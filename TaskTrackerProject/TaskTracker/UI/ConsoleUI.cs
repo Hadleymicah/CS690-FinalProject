@@ -11,12 +11,13 @@ public class ConsoleUI
         this.taskManager = taskManager;
     }
 
+    // Displays the main menu options to the user.
     public void DisplayMainMenu()
     {
         Console.Clear();
-        Console.WriteLine("===================================");
-        Console.WriteLine("          T A S K T R A C K E R    ");
-        Console.WriteLine("===================================");
+        Console.WriteLine("=========================================");
+        Console.WriteLine("          T A S K T R A C K E R          ");
+        Console.WriteLine("=========================================");
         Console.WriteLine($"Today: {DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}");
         Console.WriteLine();
         Console.WriteLine("[1] Add New Task");
@@ -28,6 +29,8 @@ public class ConsoleUI
         Console.WriteLine("===================================");
         Console.Write("Enter your choice (1-6): ");
     }
+
+    // Displays the task addition options to the user.
 
     public void DisplayAddTaskScreen()
     {
@@ -88,6 +91,8 @@ public class ConsoleUI
         }
     }
 
+
+    // Displays the edit task options to the user.
     public void DisplayEditTaskScreen(Task task)
     {
         bool continueEditing = true;
@@ -217,6 +222,8 @@ public class ConsoleUI
         }
     }
 
+
+    // Displays the delete task options and confirmation prompts (NFR5) to the user.
     public void DisplayDeleteTaskConfirmation(Task task)
     {
         Console.Clear();
@@ -244,6 +251,7 @@ public class ConsoleUI
         }
     }
 
+    // Displays the dashboard to the user.
     public void DisplayDashboard()
     {
         bool viewingDashboard = true;
@@ -352,6 +360,8 @@ public class ConsoleUI
         }
     }
 
+
+    // Displays the task details and actions to the user.
     public void DisplayTaskDetails(Task task)
     {
         bool viewingDetails = true;
@@ -410,6 +420,9 @@ public class ConsoleUI
         }
     }
 
+
+ 
+    // Displays the daily summary to the user.
     public void DisplayDailySummary(DailySummary summary)
     {
         Console.Clear();
@@ -434,6 +447,8 @@ public class ConsoleUI
         }
     }
 
+
+    // Displays the task input options to the user and returns a new Task object.
     public Task? GetTaskInputFromUser()
     {
         Console.Write("Enter task title: ");
@@ -496,7 +511,7 @@ public class ConsoleUI
 
     public Task GetTaskUpdatesFromUser(Task currentTask)
     {
-        // This is actually handled in the DisplayEditTaskScreen method
+        
         return currentTask;
     }
 

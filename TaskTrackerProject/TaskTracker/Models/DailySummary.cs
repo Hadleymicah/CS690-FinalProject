@@ -10,6 +10,8 @@ public class DailySummary
     public List<Task> CompletedTasks { get; set; }
     public List<Task> PendingTasks { get; set; }
 
+
+    // Constructor to initialize the DailySummary with the date, completed tasks, and pending tasks.
     public DailySummary(DateTime date, List<Task> completedTasks, List<Task> pendingTasks)
     {
         Date = date;
@@ -19,6 +21,8 @@ public class DailySummary
         PendingTasksCount = pendingTasks.Count;
     }
 
+
+    // FR5: Generates an end-of-day summary report of completed and pending tasks.
     public string GenerateSummaryReport()
     {
         StringBuilder report = new StringBuilder();
@@ -26,7 +30,7 @@ public class DailySummary
         report.AppendLine($"Tasks completed today: {CompletedTasksCount}");
         report.AppendLine($"Tasks pending: {PendingTasksCount}");
         
-        // Display upcoming due dates
+        // Display upcoming due dates (tasks due in the next 3 days).
         report.AppendLine("\nUpcoming due dates (next 3 days):");
         var upcomingTasks = PendingTasks
             .Where(t => t.DueDate.HasValue && t.DueDate.Value.Date <= DateTime.Now.AddDays(3).Date)

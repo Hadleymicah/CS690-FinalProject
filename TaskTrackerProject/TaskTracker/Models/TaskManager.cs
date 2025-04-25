@@ -6,14 +6,15 @@ using System.Text;
 public class TaskManager
 {
     private List<Task> Tasks { get; set; }
-    private const string Delimiter = "|||";
-    private readonly string filePath = "tasks.txt";
-    private int nextId = 1;
+    private const string Delimiter = "|||"; // This is used to separate fields when saving tasks to a file.
+    private readonly string filePath = "tasks.txt"; // File path for task persistence.
+    private int nextId = 1; // Tracks the next available task ID.
 
     public TaskManager()
     {
         Tasks = new List<Task>();
-        LoadTasks();
+        LoadTasks(); // NFR3: Tasks are loaded from persistent storage on initialization.
+        
     }
 
     //Overloaded constructor to allow for testing
@@ -36,8 +37,9 @@ public class TaskManager
         return nextId++;
     }
 
+// FR1: Allows adding a new task with required properties.
     public Task AddTask(string title, string description, Priority priority, bool isImportant, DateTime? dueDate)
-{
+    {
     if (string.IsNullOrEmpty(title))
     {
         throw new ArgumentNullException(nameof(title), "Title cannot be null or empty.");
@@ -45,19 +47,20 @@ public class TaskManager
 
     var newTask = new Task(GetNextTaskId(), title, description, priority, isImportant, dueDate);
 
-    // Existing logic for adding a task
-    Tasks.Add(newTask);
-    SaveTasks();
-    return newTask;
-}
 
+    Tasks.Add(newTask);
+    SaveTasks(); // NFR3: Ensures tasks are saved persistently.
+    return newTask;
+    }
+
+    // FR6: Allows permanent removal of a task.
     public bool RemoveTask(int id)
     {
         var task = GetTaskById(id);
         if (task != null)
         {
             Tasks.Remove(task);
-            SaveTasks();
+            SaveTasks(); // NFR3: Updates the persistent data after deletion.
             return true;
         }
         return false;
@@ -68,21 +71,27 @@ public class TaskManager
         return Tasks;
     }
 
+    // FR3: Retrieves tasks categorized by priority.
     public List<Task> GetTasksByPriority(Priority priority)
     {
         return Tasks.Where(t => t.TaskPriority == priority).ToList();
     }
 
+
+    // FR3: Retrieves tasks that are completed.
     public List<Task> GetCompletedTasks()
     {
         return Tasks.Where(t => t.IsCompleted).ToList();
     }
 
+    // FR3: Retrieves tasks that are pending (not completed).
     public List<Task> GetPendingTasks()
     {
         return Tasks.Where(t => !t.IsCompleted).ToList();
     }
 
+
+    // FR2: Retrieves tasks marked as "important."
     public List<Task> GetImportantTasks()
     {
         return Tasks.Where(t => t.IsImportant).ToList();
@@ -93,6 +102,8 @@ public class TaskManager
         return Tasks.FirstOrDefault(t => t.Id == id)!;
     }
 
+
+    // FR7: Allows modification of a task's properties.
     public bool UpdateTask(Task task)
     {
         var existingTask = GetTaskById(task.Id);
@@ -111,12 +122,15 @@ public class TaskManager
             {
                 existingTask.IsCompleted = task.IsCompleted;
             }
-            SaveTasks();
+            SaveTasks(); // NFR3: Ensures updated tasks are stored persistently.
             return true;
         }
         return false;
     }
 
+
+
+    // Saves all tasks to persistent storage.
     public void SaveTasks()
     {
         var lines = new List<string>();
@@ -139,11 +153,13 @@ public class TaskManager
         File.WriteAllLines(filePath, lines);
     }
 
+
+    // Loads tasks from persistent storage.
     public void LoadTasks()
     {
         if (!File.Exists(filePath))
         {
-            return;
+            return; // If the file doesn't exist, there are no tasks to load.
         }
 
         Tasks.Clear();

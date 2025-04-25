@@ -7,8 +7,9 @@ namespace TaskTracker.Tests
     public class Tests
     {
 
+        // Task Class Tests
         [Fact]
-        public void Task_DefaultConstructor_SetsDefaultsCorrectly()
+        public void Task_DefaultConstructor_SetsDefaultsCorrectly() // Ensures the constructor assigns default values properly.
         {
             // Assume valid parameters for the constructor
             var task = new Task(0, "Default Title", "Default Description", Priority.Low, false, null);
@@ -24,7 +25,7 @@ namespace TaskTracker.Tests
         }
 
         [Fact]
-        public void Task_MarkAsCompleteTwice_DoesNotThrow()
+        public void Task_MarkAsCompleteTwice_DoesNotThrow() // Verifies that marking a task as complete multiple times does not cause errors and maintains the correct state.
         {
             // Arrange
             var task = new Task(1, "Task", "Description", Priority.Low, false, null);
@@ -35,10 +36,9 @@ namespace TaskTracker.Tests
             Assert.True(task.IsCompleted);
         }
 
-        // TaskManager class
-
+        // TaskManager Class Tests
         [Fact]
-        public void TaskManager_Constructor_InitializesWithHistoricalTasks()
+        public void TaskManager_Constructor_InitializesWithHistoricalTasks() //Ensures that the TaskManager constructor correctly initializes with provided tasks.
         {
             // Arrange: Provide mock historical tasks
             var mockTasks = new List<Task>
@@ -58,7 +58,7 @@ namespace TaskTracker.Tests
         }
 
         [Fact]
-        public void TaskManager_AddTask_NullTitle_ThrowsException()
+        public void TaskManager_AddTask_NullTitle_ThrowsException() //Validates that adding a task with a null or empty title throws an appropriate exception.
         {
             // Arrange
             var taskManager = new TaskManager();
@@ -67,9 +67,9 @@ namespace TaskTracker.Tests
             Assert.Throws<ArgumentNullException>(() => taskManager.AddTask(string.Empty, "Description", Priority.Low, false, null));
         }
 
-        // DailySummary class
+        // DailySummary Class Tests
         [Fact]
-        public void DailySummary_EmptyLists_InitializesCorrectly()
+        public void DailySummary_EmptyLists_InitializesCorrectly() // Confirms that the DailySummary initializes correctly with empty task lists.
         {
             // Arrange
             DateTime today = DateTime.Today;
@@ -84,7 +84,7 @@ namespace TaskTracker.Tests
         }
 
         [Fact]
-        public void DailySummary_GenerateSummaryReport_WithNoTasks_ReturnsEmptyMessage()
+        public void DailySummary_GenerateSummaryReport_WithNoTasks_ReturnsEmptyMessage() //Tests that the summary report correctly reflects the absence of completed and pending tasks.
         {
             // Arrange
             DateTime today = DateTime.Today;
