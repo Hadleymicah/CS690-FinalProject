@@ -16,14 +16,34 @@ public class TaskManager
         LoadTasks();
     }
 
-    public Task AddTask(string title, string description, Priority priority, bool isImportant, DateTime? dueDate)
+    private int GetNextTaskId()
     {
-        var task = new Task(nextId, title, description, priority, isImportant, dueDate);
-        Tasks.Add(task);
-        nextId++;
-        SaveTasks();
-        return task;
+        return nextId++;
     }
+
+   // public Task AddTask(string title, string description, Priority priority, bool isImportant, DateTime? dueDate)
+   // {
+    //    var task = new Task(nextId, title, description, priority, isImportant, dueDate);
+     //   Tasks.Add(task);
+      //  nextId++;
+      //  SaveTasks();
+      //  return task;
+   // }
+
+    public Task AddTask(string title, string description, Priority priority, bool isImportant, DateTime? dueDate)
+{
+    if (string.IsNullOrEmpty(title))
+    {
+        throw new ArgumentNullException(nameof(title), "Title cannot be null or empty.");
+    }
+
+    var newTask = new Task(GetNextTaskId(), title, description, priority, isImportant, dueDate);
+
+    // Existing logic for adding a task
+    Tasks.Add(newTask);
+    SaveTasks();
+    return newTask;
+}
 
     public bool RemoveTask(int id)
     {
