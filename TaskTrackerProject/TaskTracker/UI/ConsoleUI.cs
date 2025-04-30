@@ -43,10 +43,12 @@ public class ConsoleUI
             Console.WriteLine("          ADD NEW TASK            ");
             Console.WriteLine("===================================");
             
+            // Get task input from the user
             var newTask = GetTaskInputFromUser();
             
             if (newTask != null)
             {
+                // Display a summary of the task entered
                 Console.WriteLine("\nTask Summary:");
                 Console.WriteLine($"Title: {newTask.Title}");
                 Console.WriteLine($"Description: {newTask.Description}");
@@ -54,6 +56,7 @@ public class ConsoleUI
                 Console.WriteLine($"Important: {(newTask.IsImportant ? "Yes" : "No")}");
                 Console.WriteLine($"Due Date: {(newTask.DueDate.HasValue ? newTask.DueDate.Value.ToShortDateString() : "Not set")}");
                 
+                // Provide options to save, edit, or cancel the task
                 Console.WriteLine("\n[1] Save task");
                 Console.WriteLine("[2] Edit information");
                 Console.WriteLine("[3] Cancel");
@@ -63,6 +66,7 @@ public class ConsoleUI
                 
                 if (confirmation == "1")
                 {
+                    // Save the task and ask if the user wants to add another one
                     taskManager.AddTask(newTask.Title, newTask.Description, newTask.TaskPriority, newTask.IsImportant, newTask.DueDate);
                     ShowNotification("Task saved successfully!");
                     
@@ -96,12 +100,15 @@ public class ConsoleUI
     public void DisplayEditTaskScreen(Task task)
     {
         bool continueEditing = true;
+
+        // Create a copy of the original task to make edits without modifying the original directly
         Task editedTask = new Task(task.Id, task.Title, task.Description, task.TaskPriority, task.IsImportant, task.DueDate)
         {
             IsCompleted = task.IsCompleted,
             CreationDate = task.CreationDate
         };
 
+        // Loop to display editing options
         while (continueEditing)
         {
             Console.Clear();
@@ -117,6 +124,7 @@ public class ConsoleUI
             Console.WriteLine($"Current Status: {(editedTask.IsCompleted ? "Completed" : "Pending")}");
             Console.WriteLine();
             
+            // Display menu for editing specific fields
             Console.WriteLine("Select field to edit:");
             Console.WriteLine("[1] Title");
             Console.WriteLine("[2] Description");
@@ -133,6 +141,7 @@ public class ConsoleUI
             switch (choice)
             {
                 case "1":
+                // Update task title
                     Console.Write("Enter new title: ");
                     string newTitle = Console.ReadLine() ?? string.Empty;
                     if (!string.IsNullOrWhiteSpace(newTitle))
@@ -142,12 +151,14 @@ public class ConsoleUI
                     break;
                     
                 case "2":
+                // Update task description
                     Console.Write("Enter new description: ");
                     string newDescription = Console.ReadLine() ?? string.Empty;
                     editedTask.UpdateDescription(newDescription ?? "");
                     break;
                     
                 case "3":
+                // Update task priority
                     Console.WriteLine("Select new priority:");
                     Console.WriteLine("[1] High");
                     Console.WriteLine("[2] Medium");
@@ -164,6 +175,7 @@ public class ConsoleUI
                     break;
                     
                 case "4":
+                // Toggle importance status
                     editedTask.ToggleImportance();
                     Console.WriteLine($"Task is now {(editedTask.IsImportant ? "marked as important" : "not marked as important")}");
                     Console.WriteLine("Press any key to continue...");
@@ -171,6 +183,7 @@ public class ConsoleUI
                     break;
                     
                 case "5":
+                // Update due date
                     Console.WriteLine("Enter new due date (MM/DD/YYYY) or leave empty to remove:");
                     string dueDateInput = Console.ReadLine() ?? string.Empty;
                     
@@ -193,6 +206,7 @@ public class ConsoleUI
                     break;
                     
                 case "6":
+                // Toggle completion status
                     editedTask.IsCompleted = !editedTask.IsCompleted;
                     Console.WriteLine($"Task is now {(editedTask.IsCompleted ? "completed" : "pending")}");
                     Console.WriteLine("Press any key to continue...");
@@ -200,6 +214,7 @@ public class ConsoleUI
                     break;
                     
                 case "7":
+                // Save changes and update the task in the task manager
                     if (taskManager.UpdateTask(editedTask))
                     {
                         ShowNotification("Task updated successfully!");
@@ -212,10 +227,12 @@ public class ConsoleUI
                     break;
                     
                 case "8":
+                // Cancel editing and return to the previous screen
                     continueEditing = false;
                     break;
                     
                 default:
+                // Handle invalid input
                     ShowError("Invalid choice. Please try again.");
                     break;
             }
@@ -230,6 +247,7 @@ public class ConsoleUI
         Console.WriteLine("===================================");
         Console.WriteLine("          DELETE TASK             ");
         Console.WriteLine("===================================");
+        // Show details of the task being deleted for user confirmation.
         Console.WriteLine("Are you sure you want to delete this task?");
         Console.WriteLine();
         Console.WriteLine($"Title: {task.Title}");
@@ -238,6 +256,7 @@ public class ConsoleUI
         Console.WriteLine($"Due Date: {(task.DueDate.HasValue ? task.DueDate.Value.ToShortDateString() : "Not set")}");
         Console.WriteLine();
         
+        // Confirm deletion with the user.
         if (GetConfirmationFromUser("Delete this task? (y/n): "))
         {
             if (taskManager.RemoveTask(task.Id))
@@ -263,12 +282,14 @@ public class ConsoleUI
             Console.WriteLine("          TASK DASHBOARD          ");
             Console.WriteLine("===================================");
             
+            // Retrieve task statistics for display.
             var allTasks = taskManager.GetAllTasks();
             var completedTasks = taskManager.GetCompletedTasks();
             var pendingTasks = taskManager.GetPendingTasks();
             var highPriorityTasks = taskManager.GetTasksByPriority(Priority.High);
             var importantTasks = taskManager.GetImportantTasks();
             
+            // Display statistics to the user.
             Console.WriteLine($"Total tasks: {allTasks.Count}");
             Console.WriteLine($"Completed: {completedTasks.Count}");
             Console.WriteLine($"Pending: {pendingTasks.Count}");
@@ -276,6 +297,7 @@ public class ConsoleUI
             Console.WriteLine($"Important: {importantTasks.Count}");
             Console.WriteLine();
             
+            // Provide filter options to view specific sets of tasks.
             Console.WriteLine("Filter options:");
             Console.WriteLine("[1] All Tasks");
             Console.WriteLine("[2] Pending Tasks");
@@ -288,6 +310,7 @@ public class ConsoleUI
             string filterChoice = Console.ReadLine() ?? string.Empty;
             List<Task> filteredTasks = new List<Task>();
             
+            // Determine filtering logic based on user input.
             switch (filterChoice)
             {
                 case "1":
@@ -306,6 +329,7 @@ public class ConsoleUI
                     filteredTasks = importantTasks;
                     break;
                 case "6":
+                    // Return to main menu
                     viewingDashboard = false;
                     continue;
                 default:
@@ -313,7 +337,8 @@ public class ConsoleUI
                     filteredTasks = allTasks;
                     break;
             }
-            
+
+            // Display tasks based on the chosen filter.
             if (filteredTasks.Count == 0)
             {
                 Console.WriteLine("\nNo tasks to display with this filter.");
@@ -322,6 +347,7 @@ public class ConsoleUI
                 continue;
             }
             
+            // Render a table of filtered tasks.
             DisplayTaskTable(filteredTasks);
             
             Console.WriteLine("\nOptions:");
@@ -332,6 +358,7 @@ public class ConsoleUI
             
             string taskChoice = Console.ReadLine() ?? string.Empty;
             
+             // Handle user actions on tasks or dashboard navigation.
             if (taskChoice.ToUpper() == "B")
             {
                 // Continue the loop to see filters again
@@ -339,14 +366,14 @@ public class ConsoleUI
             }
             else if (taskChoice.ToUpper() == "M")
             {
-                viewingDashboard = false;
+                viewingDashboard = false; // Exit to main menu.
             }
             else if (int.TryParse(taskChoice, out int taskId))
             {
                 var task = taskManager.GetTaskById(taskId);
                 if (task != null)
                 {
-                    DisplayTaskDetails(task);
+                    DisplayTaskDetails(task); // Show task details and actions.
                 }
                 else
                 {
@@ -372,6 +399,8 @@ public class ConsoleUI
             Console.WriteLine("===================================");
             Console.WriteLine("          TASK DETAILS            ");
             Console.WriteLine("===================================");
+
+            // Show detailed task information.
             Console.WriteLine($"Title: {task.Title}");
             Console.WriteLine($"Description: {task.Description}");
             Console.WriteLine($"Priority: {task.TaskPriority}");
@@ -381,6 +410,7 @@ public class ConsoleUI
             Console.WriteLine($"Created: {task.CreationDate.ToShortDateString()}");
             Console.WriteLine();
             
+            // Provide actions for the task.
             Console.WriteLine("Available actions:");
             Console.WriteLine($"[1] Mark as {(task.IsCompleted ? "Incomplete" : "Complete")}");
             Console.WriteLine("[2] Edit Task");
@@ -390,9 +420,11 @@ public class ConsoleUI
             
             string actionChoice = Console.ReadLine() ?? string.Empty;
             
+            // Handle user input for task actions.
             switch (actionChoice)
             {
                 case "1":
+                // Toggle task completion status.
                     task.IsCompleted = !task.IsCompleted;
                     taskManager.UpdateTask(task);
                     ShowNotification($"Task marked as {(task.IsCompleted ? "completed" : "pending")}!");
@@ -405,11 +437,13 @@ public class ConsoleUI
                     break;
                     
                 case "3":
+                // Open the delete task confirmation screen.
                     DisplayDeleteTaskConfirmation(task);
                     viewingDetails = false;
                     break;
                     
                 case "4":
+                // Exit task details and return to the dashboard.
                     viewingDetails = false;
                     break;
                     
@@ -430,6 +464,7 @@ public class ConsoleUI
         Console.WriteLine("          DAILY SUMMARY           ");
         Console.WriteLine("===================================");
         
+        // Show the summary report generated by the DailySummary object.
         Console.WriteLine(summary.GenerateSummaryReport());
         
         Console.WriteLine("\nOptions:");
@@ -438,7 +473,8 @@ public class ConsoleUI
         Console.Write("Enter your choice (1-2): ");
         
         string choice = Console.ReadLine() ?? string.Empty;
-        
+
+        // Allow the user to save the summary to a file or return to the main menu.
         if (choice == "1")
         {
             string fileName = $"TaskSummary_{DateTime.Now:yyyyMMdd}.txt";
@@ -460,9 +496,11 @@ public class ConsoleUI
             return null; // Explicitly returning null for invalid input
         }
         
+        // Prompt the user to enter an optional description for the task.
         Console.Write("Enter task description (optional): ");
         string description = Console.ReadLine() ?? "";
         
+        // Display priority selection options.
         Console.WriteLine("\nSelect priority:");
         Console.WriteLine("[1] High");
         Console.WriteLine("[2] Medium");
@@ -470,7 +508,8 @@ public class ConsoleUI
         Console.Write("Enter your choice (1-3): ");
         string priorityInput = Console.ReadLine() ?? string.Empty;
         
-        Priority priority = Priority.Medium; // Default
+        // Set the default priority to Medium.
+        Priority priority = Priority.Medium; 
         switch (priorityInput)
         {
             case "1":
@@ -483,17 +522,21 @@ public class ConsoleUI
                 priority = Priority.Low;
                 break;
             default:
+            // Notify the user of invalid input and retain the default priority.
                 Console.WriteLine("Invalid priority. Setting to Medium.");
                 break;
         }
         
+        // Ask the user whether the task should be marked as important.
         Console.Write("\nMark as important? (y/n): ");
         bool isImportant = Console.ReadLine()?.ToLower() == "y";
         
+        // Initialize the due date to null, as it is optional.
         DateTime? dueDate = null;
         Console.Write("\nEnter due date (MM/DD/YYYY) or leave empty for no due date: ");
         string dueDateInput = Console.ReadLine() ?? string.Empty;
         
+        // Parse the due date if the input is provided.
         if (!string.IsNullOrWhiteSpace(dueDateInput))
         {
             try
@@ -506,6 +549,7 @@ public class ConsoleUI
             }
         }
         
+        // Return a new Task object with the provided input.
         return new Task(0, title, description, priority, isImportant, dueDate);
     }
 
@@ -515,6 +559,8 @@ public class ConsoleUI
         return currentTask;
     }
 
+
+    // Prompts the user to input a task ID and validates the input.
     public int GetTaskIdFromUser()
     {
         Console.Write("Enter task ID: ");
@@ -523,10 +569,12 @@ public class ConsoleUI
             return id;
         }
         
+        // Show an error message and return -1 for invalid input.
         ShowError("Invalid ID format.");
         return -1;
     }
 
+    // Prompts the user for a yes/no confirmation and returns the result as a boolean.
     public bool GetConfirmationFromUser(string message)
     {
         Console.Write(message);
@@ -534,6 +582,7 @@ public class ConsoleUI
         return response == "y" || response == "yes";
     }
 
+    // Displays a notification message to the user.
     public void ShowNotification(string message)
     {
         Console.WriteLine();
@@ -542,6 +591,7 @@ public class ConsoleUI
         Console.ReadKey();
     }
 
+    // Displays an error message to the user.
     public void ShowError(string message)
     {
         Console.WriteLine();
@@ -550,12 +600,14 @@ public class ConsoleUI
         Console.ReadKey();
     }
 
+// Displays a table of tasks in a formatted layout.
     private void DisplayTaskTable(List<Task> tasks)
     {
         Console.WriteLine();
         Console.WriteLine("ID | Title                  | Priority | Important | Due Date   | Status");
         Console.WriteLine("---+------------------------+----------+-----------+------------+----------");
         
+        // Iterate through the list of tasks and display each one in a row.
         foreach (var task in tasks)
         {
             string title = task.Title.Length > 20 ? task.Title.Substring(0, 17) + "..." : task.Title.PadRight(20);
@@ -564,6 +616,7 @@ public class ConsoleUI
             string dueDate = (task.DueDate.HasValue ? task.DueDate.Value.ToShortDateString() : "-").PadRight(10);
             string status = task.IsCompleted ? "Completed" : "Pending";
             
+            // Display the task details in a formatted row.
             Console.WriteLine($"{task.Id.ToString().PadRight(2)} | {title} | {priority} | {important} | {dueDate} | {status}");
         }
     }

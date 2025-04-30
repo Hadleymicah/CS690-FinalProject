@@ -1,5 +1,6 @@
 namespace TaskTracker;
 
+// Represents a task in the task tracking system.
 public class Task
 {
     public int Id { get; set; }
@@ -11,6 +12,7 @@ public class Task
     public Priority TaskPriority { get; set; }
     public bool IsImportant { get; set; }
 
+    // Constructor to initialize a new task with required properties.
     public Task(int id, string title, string description, Priority priority, bool isImportant, DateTime? dueDate)
     {
         Id = id;

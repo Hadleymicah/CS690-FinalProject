@@ -37,7 +37,7 @@ public class TaskManager
         return nextId++;
     }
 
-// FR1: Allows adding a new task with required properties.
+    // FR1: Allows adding a new task with required properties.
     public Task AddTask(string title, string description, Priority priority, bool isImportant, DateTime? dueDate)
     {
     if (string.IsNullOrEmpty(title))
@@ -170,6 +170,7 @@ public class TaskManager
         {
             try
             {
+                // Parses task data from the file.
                 var parts = line.Split(Delimiter);
                 if (parts.Length < 8)
                 {
